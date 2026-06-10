@@ -1,0 +1,83 @@
+.reading-section {
+  margin-bottom: 40px;
+}
+
+.reading-section-title {
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.reading-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.book-card--finished {
+  opacity: 0.6;
+}
+
+.progress-ring-track {
+  fill: none;
+  stroke: rgba(122,184,154,0.12);
+  stroke-width: 3;
+}
+
+.progress-ring-bar {
+  fill: none;
+  stroke: var(--accent-green);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.progress-ring-text {
+  fill: var(--accent-green);
+  font-family: var(--font-num);
+  font-size: 10px;
+  text-anchor: middle;
+}
+
+.book-info {}
+
+.book-title {
+  font-family: var(--font-serif);
+  font-size: 1.0rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: 0.03em;
+}
+
+.book-author {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.book-chapter {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.book-note {
+  font-family: var(--font-serif);
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}

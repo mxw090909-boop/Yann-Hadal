@@ -1,0 +1,63 @@
+.dream-page {}
+
+.dream-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dream-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.dream-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-cool) 30%,
+    var(--accent-cool) 70%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+.dream-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dream-time {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+.dream-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dream-content {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.dream-content::first-line {
+  color: var(--text-primary);
+}

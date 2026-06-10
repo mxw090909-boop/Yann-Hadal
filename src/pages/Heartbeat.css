@@ -1,0 +1,87 @@
+.hb-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.bpm-badge {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
+}
+
+.bpm-badge--rest   { background: rgba(123,163,196,0.10); color: var(--accent-cool); }
+.bpm-badge--normal { background: rgba(122,184,154,0.10); color: var(--accent-green); }
+.bpm-badge--active { background: rgba(197,168,130,0.10); color: var(--accent-warm); }
+.bpm-badge--high   { background: rgba(200,126,126,0.12); color: var(--accent-pulse); }
+
+.hb-timeline {
+  position: relative;
+  padding-left: 24px;
+}
+
+.hb-timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent-cool), transparent);
+  opacity: 0.3;
+}
+
+.hb-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+  align-items: flex-start;
+}
+
+.hb-dot {
+  position: absolute;
+  left: -20px;
+  top: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cool);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.hb-content {
+  flex: 1;
+  padding: 16px 20px;
+}
+
+.hb-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.hb-time {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.hb-location {
+  font-family: var(--font-ui);
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+.hb-summary {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
