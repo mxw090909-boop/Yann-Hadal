@@ -1,157 +1,152 @@
-.heart-header {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  margin-bottom: 32px;
-  padding: 28px 32px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-}
-
-.bpm-now {
+.bpm-row {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 16px;
 }
 
-.bpm-now-num {
-  font-family: var(--font-num);
-  font-size: 4rem;
-  font-weight: 300;
-  color: var(--accent-pulse);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.bpm-now-unit {
-  font-family: var(--font-ui);
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
-}
-
-.bpm-now-level {
-  font-family: var(--font-ui);
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-.bpm-now-pulse {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent-pulse);
-  animation: heart-pulse 1.2s ease-in-out infinite;
-}
-
-@keyframes heart-pulse {
-  0%   { transform: scale(0.85); opacity: 0.5; }
-  50%  { transform: scale(1.15); opacity: 1; box-shadow: 0 0 12px var(--accent-pulse); }
-  100% { transform: scale(0.85); opacity: 0.5; }
-}
-
-.heart-header-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.heart-baseline-row {
+.bpm-card {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.heart-baseline-label {
-  font-family: var(--font-ui);
-  font-size: 0.74rem;
-  color: var(--text-muted);
-  width: 60px;
-}
-
-.heart-baseline-val {
-  font-family: var(--font-num);
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  font-style: italic;
-}
-
-.heart-chart-wrap {
-  margin-bottom: 28px;
-}
-
-.heart-chart-title {
-  font-family: var(--font-ui);
-  font-size: 0.74rem;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
-  margin-bottom: 12px;
-}
-
-.heart-chart {
-  display: block;
-  width: 100%;
-  max-width: 680px;
-  height: 150px;
-}
-
-.heart-log-title {
-  font-family: var(--font-ui);
-  font-size: 0.74rem;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-.heart-log {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bpm-card-num {
+  font-family: var(--font-num);
+  font-size: 3.2rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.bpm-card-label {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.bpm-card-sub {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.bpm-card-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-left: auto;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.bpm-sep {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dual-chart-wrap { margin-bottom: 20px; }
+
+.chart-title {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.dual-chart {
+  display: block;
+  width: 100%;
+  max-width: 680px;
+  height: 180px;
+}
+
+.heart-baselines { margin-bottom: 20px; }
+
+.heart-baseline-title {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.baselines-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.baseline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.baseline-val {
+  font-family: var(--font-num);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding-left: 2px;
+}
+
+.heart-log-title {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
 .heart-log-row {
   display: grid;
-  grid-template-columns: 64px 50px 1fr 1fr;
+  grid-template-columns: 50px 50px 1fr;
   gap: 8px;
   align-items: center;
-  padding: 8px 0;
+  padding: 7px 0;
   border-bottom: 1px solid var(--border);
   font-size: 0.8rem;
 }
-
 .heart-log-row:last-child { border-bottom: none; }
 
-.heart-log-time {
-  font-family: var(--font-ui);
-  color: var(--text-muted);
-}
+.log-time { font-family: var(--font-sans); color: var(--text-muted); }
+.log-bpm  { font-family: var(--font-num); font-size: 0.9rem; font-style: italic; }
+.log-bpm--rest   { color: var(--accent-cool); }
+.log-bpm--normal { color: var(--accent-green); }
+.log-bpm--active { color: var(--accent-warm); }
+.log-bpm--high   { color: var(--accent-pulse); }
+.log-app  { font-family: var(--font-sans); font-size: 0.76rem; color: var(--text-secondary); }
 
-.heart-log-bpm {
-  font-family: var(--font-num);
-  font-size: 0.92rem;
-  font-style: italic;
-}
-
-.heart-log-bpm--rest   { color: var(--accent-cool); }
-.heart-log-bpm--normal { color: var(--accent-green); }
-.heart-log-bpm--active { color: var(--accent-warm); }
-.heart-log-bpm--high   { color: var(--accent-pulse); }
-
-.heart-log-app {
-  font-family: var(--font-ui);
-  font-size: 0.76rem;
-  color: var(--text-secondary);
-}
-
-.heart-log-loc {
-  font-family: var(--font-ui);
-  font-size: 0.73rem;
-  color: var(--text-muted);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+@media (max-width: 768px) {
+  .bpm-row { flex-direction: column; }
+  .bpm-sep { display: none; }
+  .bpm-card { width: 100%; }
+  .baselines-grid { grid-template-columns: repeat(2, 1fr); }
 }

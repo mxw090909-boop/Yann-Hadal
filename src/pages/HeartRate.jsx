@@ -1,169 +1,191 @@
 import { useEffect, useState, useRef } from 'react'
-import { fetchHeartHistory, MOCK_HEART_HISTORY } from '../api/index.js'
+import { fetchHeartHistory, MOCK_HEART_HISTORY, MOCK_HEARTBEAT_MEMORIES } from '../api/index.js'
 import './HeartRate.css'
 
-function HeartChart({ events }) {
+// 双线图：年年心率(红) + 蔺知砚心跳(蓝)
+function DualChart({ heartEvents, heartbeatEvents }) {
   const canvasRef = useRef(null)
-
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas || !events.length) return
+    if (!canvas) return
     const ctx = canvas.getContext('2d')
-    const W = canvas.width
-    const H = canvas.height
-    const PAD = { top: 16, bottom: 28, left: 32, right: 16 }
-
+    const W = canvas.width, H = canvas.height
+    const PAD = { top: 20, bottom: 32, left: 40, right: 16 }
     ctx.clearRect(0, 0, W, H)
 
-    const bpms = events.map(e => Number(e.heart))
-    const minBpm = Math.max(40, Math.min(...bpms) - 8)
-    const maxBpm = Math.max(...bpms) + 8
+    const allBpms = [
+      ...heartEvents.map(e => Number(e.heart)),
+      ...heartbeatEvents.map(e => Number(e.heart_bpm || 71))
+    ]
+    const minB = Math.max(40, Math.min(...allBpms) - 8)
+    const maxB = Math.max(...allBpms) + 8
+    const iW = W - PAD.left - PAD.right
+    const iH = H - PAD.top - PAD.bottom
 
-    const innerW = W - PAD.left - PAD.right
-    const innerH = H - PAD.top - PAD.bottom
+    function tx(i, total) { return PAD.left + (i / (total - 1)) * iW }
+    function ty(b) { return PAD.top + iH - ((b - minB) / (maxB - minB)) * iH }
 
-    function tx(i) { return PAD.left + (i / (events.length - 1)) * innerW }
-    function ty(bpm) { return PAD.top + innerH - ((bpm - minBpm) / (maxBpm - minBpm)) * innerH }
+    // Y轴刻度
+    ctx.fillStyle = 'rgba(120,119,116,0.6)'
+    ctx.font = `10px -apple-system, sans-serif`
+    ctx.textAlign = 'right'
+    for (let b = Math.ceil(minB/10)*10; b <= maxB; b += 10) {
+      const y = ty(b)
+      ctx.fillText(b, PAD.left - 4, y + 3)
+      ctx.beginPath()
+      ctx.strokeStyle = 'rgba(233,233,231,0.8)'
+      ctx.lineWidth = 1
+      ctx.moveTo(PAD.left, y)
+      ctx.lineTo(W - PAD.right, y)
+      ctx.stroke()
+    }
 
-    // 渐变区域
-    const grad = ctx.createLinearGradient(0, PAD.top, 0, H - PAD.bottom)
-    grad.addColorStop(0, 'rgba(200,126,126,0.20)')
-    grad.addColorStop(1, 'rgba(200,126,126,0.00)')
-    ctx.beginPath()
-    ctx.moveTo(tx(0), ty(bpms[0]))
-    bpms.forEach((b, i) => ctx.lineTo(tx(i), ty(b)))
-    ctx.lineTo(tx(bpms.length - 1), H - PAD.bottom)
-    ctx.lineTo(tx(0), H - PAD.bottom)
-    ctx.closePath()
-    ctx.fillStyle = grad
-    ctx.fill()
+    function drawLine(events, bpmKey, color, dotColor) {
+      if (events.length < 2) return
+      const bpms = events.map(e => Number(e[bpmKey] || 71))
+      // 渐变填充
+      const grad = ctx.createLinearGradient(0, PAD.top, 0, H - PAD.bottom)
+      grad.addColorStop(0, color.replace(')', ',0.15)').replace('rgb', 'rgba'))
+      grad.addColorStop(1, color.replace(')', ',0.00)').replace('rgb', 'rgba'))
+      ctx.beginPath()
+      ctx.moveTo(tx(0, bpms.length), ty(bpms[0]))
+      bpms.forEach((b, i) => ctx.lineTo(tx(i, bpms.length), ty(b)))
+      ctx.lineTo(tx(bpms.length-1, bpms.length), H-PAD.bottom)
+      ctx.lineTo(tx(0, bpms.length), H-PAD.bottom)
+      ctx.closePath()
+      ctx.fillStyle = grad
+      ctx.fill()
+      // 折线
+      ctx.beginPath()
+      ctx.strokeStyle = color
+      ctx.lineWidth = 1.8
+      ctx.lineJoin = 'round'
+      bpms.forEach((b,i) => i===0 ? ctx.moveTo(tx(i,bpms.length),ty(b)) : ctx.lineTo(tx(i,bpms.length),ty(b)))
+      ctx.stroke()
+      // 点
+      bpms.forEach((b,i) => {
+        ctx.beginPath()
+        ctx.arc(tx(i,bpms.length), ty(b), 2.5, 0, Math.PI*2)
+        ctx.fillStyle = dotColor
+        ctx.fill()
+      })
+    }
 
-    // 折线
-    ctx.beginPath()
-    ctx.strokeStyle = 'rgba(200,126,126,0.75)'
-    ctx.lineWidth = 1.8
-    ctx.lineJoin = 'round'
-    bpms.forEach((b, i) => {
-      if (i === 0) ctx.moveTo(tx(i), ty(b))
-      else ctx.lineTo(tx(i), ty(b))
-    })
-    ctx.stroke()
+    drawLine(heartEvents.slice().reverse(), 'heart', 'rgba(192,84,75,0.75)', 'rgba(192,84,75,0.9)')
+    drawLine(heartbeatEvents.slice().reverse(), 'heart_bpm', 'rgba(81,112,190,0.70)', 'rgba(81,112,190,0.9)')
 
     // 时间标注
-    ctx.fillStyle = 'rgba(90,86,104,0.9)'
-    ctx.font = `10px -apple-system, sans-serif`
+    const src = heartEvents.slice().reverse()
+    ctx.fillStyle = 'rgba(172,171,168,0.9)'
     ctx.textAlign = 'center'
-    const step = Math.ceil(events.length / 4)
-    events.forEach((e, i) => {
-      if (i % step === 0 || i === events.length - 1) {
+    const step = Math.ceil(src.length / 4)
+    src.forEach((e, i) => {
+      if (i % step === 0 || i === src.length-1) {
         const t = new Date(e.observed_at)
-        const label = `${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`
-        ctx.fillText(label, tx(i), H - 4)
+        ctx.fillText(`${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`, tx(i, src.length), H-4)
       }
     })
+  }, [heartEvents, heartbeatEvents])
 
-    // BPM点
-    bpms.forEach((b, i) => {
-      ctx.beginPath()
-      ctx.arc(tx(i), ty(b), 2.5, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(200,126,126,0.85)'
-      ctx.fill()
-    })
-  }, [events])
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="heart-chart"
-      width={680}
-      height={150}
-    />
-  )
+  return <canvas ref={canvasRef} className="dual-chart" width={680} height={180} />
 }
 
-function BpmNow({ bpm }) {
-  const level = bpm < 65 ? '静息' : bpm < 85 ? '日常' : bpm < 100 ? '活跃' : '激烈'
+function BpmCard({ bpm, label, color, sublabel }) {
   return (
-    <div className="bpm-now">
-      <span className="bpm-now-num">{bpm}</span>
-      <div>
-        <div className="bpm-now-unit">bpm</div>
-        <div className="bpm-now-level">{level}</div>
+    <div className="bpm-card">
+      <div className="bpm-card-num" style={{ color }}>{bpm}</div>
+      <div className="bpm-card-info">
+        <div className="bpm-card-label">{label}</div>
+        <div className="bpm-card-sub">{sublabel}</div>
       </div>
-      <div className="bpm-now-pulse" />
+      <div className="bpm-card-dot" style={{ background: color }} />
     </div>
   )
 }
 
 export default function HeartRate() {
-  const [data, setData] = useState(null)
+  const [heartData, setHeartData] = useState(null)
+  const [heartbeatData] = useState(MOCK_HEARTBEAT_MEMORIES)
   const [loading, setLoading] = useState(true)
-
-  const today = new Date().toISOString().slice(0, 10)
+  const today = new Date().toISOString().slice(0,10)
 
   useEffect(() => {
     fetchHeartHistory(today).then(res => {
-      setData(res)
+      setHeartData(res)
       setLoading(false)
     })
   }, [today])
 
-  const events = (data?.events || []).slice().reverse() // 时间升序给图表
-  const latest = data?.events?.[0]
-  const latestBpm = latest ? Number(latest.heart) : null
+  const heartEvents = heartData?.events || MOCK_HEART_HISTORY.events
+  const latestHeart = heartEvents[0] ? Number(heartEvents[0].heart) : 71
+  const latestZhi   = heartbeatData[0] ? Number(heartbeatData[0].heart_bpm) : 71
+
+  const heartLevel = latestHeart < 65 ? '静息' : latestHeart < 85 ? '日常' : latestHeart < 100 ? '活跃' : '激烈'
+  const zhiLevel   = latestZhi < 65 ? '平静' : latestZhi < 85 ? '日常' : '波动'
 
   return (
     <div className="page heart-page">
       <h1 className="page-title">心率</h1>
-      <p className="page-sub">年年今天的状态</p>
+      <p className="page-sub">两个人今天的状态</p>
 
       {loading ? (
         <div className="loading-state">
           <div className="dot-pulse" style={{ background: 'var(--accent-pulse)' }} />
-          正在读取心率数据…
+          读取中…
         </div>
       ) : (
         <>
-          {latestBpm && (
-            <div className="heart-header">
-              <BpmNow bpm={latestBpm} />
-              <div className="heart-header-detail">
-                <div className="heart-baseline-row">
-                  <span className="heart-baseline-label">静息基线</span>
-                  <span className="heart-baseline-val">42 – 64</span>
-                </div>
-                <div className="heart-baseline-row">
-                  <span className="heart-baseline-label">日常范围</span>
-                  <span className="heart-baseline-val">65 – 85</span>
-                </div>
-                <div className="heart-baseline-row">
-                  <span className="heart-baseline-label">历史峰值</span>
-                  <span className="heart-baseline-val" style={{ color: 'var(--accent-pulse)' }}>151</span>
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="bpm-row">
+            <BpmCard
+              bpm={latestHeart}
+              label="蔺年"
+              color="var(--accent-pulse)"
+              sublabel={heartLevel}
+            />
+            <div className="bpm-sep">·</div>
+            <BpmCard
+              bpm={latestZhi}
+              label="蔺知砚"
+              color="var(--accent-cool)"
+              sublabel={zhiLevel}
+            />
+          </div>
 
-          {events.length > 1 && (
-            <div className="heart-chart-wrap card">
-              <div className="heart-chart-title">今日心率趋势</div>
-              <HeartChart events={events} />
-            </div>
-          )}
+          <div className="chart-legend">
+            <span className="legend-dot" style={{ background: 'var(--accent-pulse)' }} />
+            <span>蔺年</span>
+            <span className="legend-dot" style={{ background: 'var(--accent-cool)', marginLeft: 12 }} />
+            <span>蔺知砚</span>
+          </div>
 
-          <div className="heart-log">
-            <div className="heart-log-title">记录详情</div>
-            {data?.events?.map((e, i) => {
+          <div className="card dual-chart-wrap">
+            <div className="chart-title">今日对比</div>
+            <DualChart heartEvents={heartEvents} heartbeatEvents={heartbeatData} />
+          </div>
+
+          <div className="heart-baselines card">
+            <div className="heart-baseline-title">年年的基线</div>
+            <div className="baselines-grid">
+              {[['静息','42–64','cool'],['日常','65–85','green'],['活跃','85–100','warm'],['峰值','151','pulse']].map(([l,v,c]) => (
+                <div key={l} className="baseline-item">
+                  <span className={`tag tag-${c}`}>{l}</span>
+                  <span className="baseline-val">{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="heart-log card">
+            <div className="heart-log-title">详细记录</div>
+            {heartEvents.map((e, i) => {
               const t = new Date(e.observed_at)
-              const timeStr = t.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
               const bpm = Number(e.heart)
-              const level = bpm < 65 ? 'rest' : bpm < 85 ? 'normal' : bpm < 100 ? 'active' : 'high'
+              const level = bpm<65?'rest':bpm<85?'normal':bpm<100?'active':'high'
               return (
                 <div key={i} className="heart-log-row">
-                  <span className="heart-log-time">{timeStr}</span>
-                  <span className={`heart-log-bpm heart-log-bpm--${level}`}>{bpm}</span>
-                  <span className="heart-log-app">{e.app}</span>
-                  <span className="heart-log-loc">{e.location?.split('\n')[2] || e.location}</span>
+                  <span className="log-time">{t.getHours()}:{String(t.getMinutes()).padStart(2,'0')}</span>
+                  <span className={`log-bpm log-bpm--${level}`}>{bpm}</span>
+                  <span className="log-app">{e.app}</span>
                 </div>
               )
             })}
