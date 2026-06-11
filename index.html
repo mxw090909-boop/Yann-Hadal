@@ -1,48 +1,15 @@
-.hb-legend { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
-
-.bpm-badge {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  padding: 3px 10px;
-  border-radius: 5px;
-}
-.bpm-badge--rest   { background: rgba(81,112,190,0.08);  color: var(--accent-cool); }
-.bpm-badge--normal { background: rgba(75,135,90,0.08);   color: var(--accent-green); }
-.bpm-badge--active { background: rgba(199,123,46,0.08);  color: var(--accent-warm); }
-.bpm-badge--high   { background: rgba(192,84,75,0.10);   color: var(--accent-pulse); }
-
-.hb-timeline { position: relative; padding-left: 20px; }
-.hb-timeline::before {
-  content: '';
-  position: absolute;
-  left: 5px; top: 8px; bottom: 8px;
-  width: 1px;
-  background: linear-gradient(to bottom, var(--accent-cool), transparent);
-  opacity: 0.25;
-}
-
-.hb-item {
-  position: relative;
-  display: flex; gap: 14px;
-  margin-bottom: 14px; align-items: flex-start;
-}
-
-.hb-dot {
-  position: absolute;
-  left: -16px; top: 14px;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--accent-cool);
-  opacity: 0.6;
-}
-
-.hb-content { flex: 1; padding: 14px 18px; }
-
-.hb-meta {
-  display: flex; align-items: center;
-  gap: 8px; flex-wrap: wrap; margin-bottom: 8px;
-}
-
-.hb-time { font-family: var(--font-sans); font-size: 0.74rem; color: var(--text-muted); }
-.hb-location { font-family: var(--font-sans); font-size: 0.72rem; color: var(--text-muted); }
-.hb-summary { font-family: var(--font-serif); font-size: 0.89rem; line-height: 1.85; color: var(--text-secondary); }
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我们的家</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

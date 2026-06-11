@@ -1,5 +1,6 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import Nav from './components/Nav.jsx'
+import BgPicker from './components/BgPicker.jsx'
 import Home from './pages/Home.jsx'
 import Dream from './pages/Dream.jsx'
 import Heartbeat from './pages/Heartbeat.jsx'
@@ -15,6 +16,7 @@ export default function App() {
     <HashRouter>
       <div className="app">
         <Nav />
+        <BgPicker />
         <main className="main">
           <Routes>
             <Route path="/"          element={<Home />} />
