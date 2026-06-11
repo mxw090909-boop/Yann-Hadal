@@ -1,152 +1,168 @@
-.bpm-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* 两颗心卡片 */
+.hearts-card {
   margin-bottom: 16px;
 }
 
-.bpm-card {
-  flex: 1;
+.hearts-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-  box-shadow: var(--shadow-sm);
+  gap: 0;
+  margin-bottom: 24px;
 }
 
-.bpm-card-num {
+.heart-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 8px;
+}
+
+.heart-num {
   font-family: var(--font-num);
-  font-size: 3.2rem;
+  font-size: 3.4rem;
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.02em;
 }
 
-.bpm-card-label {
+.heart-unit {
   font-family: var(--font-sans);
-  font-size: 0.82rem;
-  color: var(--text-primary);
-  margin-bottom: 2px;
+  font-size: 0.70rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
 }
 
-.bpm-card-sub {
+.heart-name {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.heart-badge {
   font-family: var(--font-sans);
-  font-size: 0.74rem;
-  color: var(--text-muted);
+  font-size: 0.70rem;
+  padding: 2px 9px;
+  border-radius: 4px;
+  margin-top: 2px;
 }
+.heart-badge--rest   { background: rgba(81,112,190,0.08);  color: var(--accent-cool); }
+.heart-badge--normal { background: rgba(75,135,90,0.08);   color: var(--accent-green); }
+.heart-badge--active { background: rgba(199,123,46,0.08);  color: var(--accent-warm); }
+.heart-badge--high   { background: rgba(192,84,75,0.10);   color: var(--accent-pulse); }
 
-.bpm-card-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  margin-left: auto;
-  animation: pulse-dot 1.5s ease-in-out infinite;
-}
-
-.bpm-sep {
-  font-size: 1.2rem;
-  color: var(--text-muted);
+/* 中间分隔 */
+.hearts-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
   flex-shrink: 0;
 }
 
+.hearts-divider-line {
+  width: 1px;
+  height: 32px;
+  background: var(--border);
+}
+
+.hearts-icon {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  animation: heart-beat 2s ease-in-out infinite;
+}
+
+@keyframes heart-beat {
+  0%,100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.2); opacity: 1; }
+}
+
+/* 图例 */
 .chart-legend {
   display: flex;
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: var(--text-secondary);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .legend-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dual-chart-wrap { margin-bottom: 20px; }
-
-.chart-title {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+  width: 7px; height: 7px;
+  border-radius: 50%; flex-shrink: 0;
 }
 
 .dual-chart {
   display: block;
-  width: 100%;
-  max-width: 680px;
-  height: 180px;
+  width: 100%; max-width: 700px; height: 160px;
 }
 
-.heart-baselines { margin-bottom: 20px; }
+/* 基线 */
+.baselines-card { margin-bottom: 16px; }
 
-.heart-baseline-title {
+.baselines-title {
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: 0.70rem;
   color: var(--text-muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 12px;
 }
 
-.baselines-grid {
+.baselines-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
 .baseline-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: flex; flex-direction: column; gap: 5px;
 }
 
 .baseline-val {
   font-family: var(--font-num);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-secondary);
   font-style: italic;
   padding-left: 2px;
 }
 
-.heart-log-title {
+/* 记录 */
+.log-card {}
+
+.log-title {
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: 0.70rem;
   color: var(--text-muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 12px;
 }
 
-.heart-log-row {
+.log-row {
   display: grid;
-  grid-template-columns: 50px 50px 1fr;
-  gap: 8px;
-  align-items: center;
+  grid-template-columns: 52px 48px 1fr;
+  gap: 8px; align-items: center;
   padding: 7px 0;
   border-bottom: 1px solid var(--border);
-  font-size: 0.8rem;
+  font-size: 0.79rem;
 }
-.heart-log-row:last-child { border-bottom: none; }
+.log-row:last-child { border-bottom: none; }
 
 .log-time { font-family: var(--font-sans); color: var(--text-muted); }
-.log-bpm  { font-family: var(--font-num); font-size: 0.9rem; font-style: italic; }
+.log-bpm  { font-family: var(--font-num);  font-size: 0.9rem; font-style: italic; }
 .log-bpm--rest   { color: var(--accent-cool); }
 .log-bpm--normal { color: var(--accent-green); }
 .log-bpm--active { color: var(--accent-warm); }
 .log-bpm--high   { color: var(--accent-pulse); }
-.log-app  { font-family: var(--font-sans); font-size: 0.76rem; color: var(--text-secondary); }
+.log-app  { font-family: var(--font-sans); font-size: 0.74rem; color: var(--text-secondary); }
 
 @media (max-width: 768px) {
-  .bpm-row { flex-direction: column; }
-  .bpm-sep { display: none; }
-  .bpm-card { width: 100%; }
-  .baselines-grid { grid-template-columns: repeat(2, 1fr); }
+  .heart-num { font-size: 2.6rem; }
+  .hearts-center { padding: 0 10px; }
+  .baselines-row { grid-template-columns: repeat(2, 1fr); }
 }
