@@ -1,0 +1,185 @@
+/* 两颗心 */
+.hearts-card { margin-bottom: 28px; }
+
+.hearts-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.heart-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+}
+
+.heart-num {
+  font-family: var(--font-num);
+  font-size: 3.2rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.heart-unit {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.heart-name {
+  font-family: var(--font-serif);
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.hearts-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  flex-shrink: 0;
+}
+
+.hearts-divider-line {
+  width: 1px; height: 30px;
+  background: var(--border);
+}
+
+.hearts-icon {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  animation: heart-beat 2s ease-in-out infinite;
+}
+
+@keyframes heart-beat {
+  0%,100% { transform: scale(1);   opacity: 0.5; }
+  50%      { transform: scale(1.2); opacity: 1; }
+}
+
+.pulse-legend {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+.pulse-chart {
+  display: block;
+  width: 100%; max-width: 680px; height: 150px;
+}
+
+/* 共用时间线 */
+.pulse-timeline {}
+
+.pulse-timeline-title {
+  font-family: var(--font-sans);
+  font-size: 0.71rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.pt-item {
+  display: flex;
+  gap: 14px;
+}
+
+.pt-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 12px;
+}
+
+.pt-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.pt-dot--yan { background: var(--accent-pulse); }
+.pt-dot--zhi { background: var(--accent-cool); }
+
+.pt-line {
+  flex: 1;
+  width: 1px;
+  background: var(--border-mid);
+  margin: 4px 0;
+  min-height: 14px;
+}
+
+.pt-body {
+  flex: 1;
+  padding-bottom: 20px;
+  min-width: 0;
+}
+
+.pt-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.pt-time {
+  font-family: var(--font-num);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.pt-who {
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+}
+.pt-who--yan { color: var(--accent-pulse); }
+.pt-who--zhi { color: var(--accent-cool); }
+
+.pt-bpm {
+  font-family: var(--font-num);
+  font-size: 0.76rem;
+  font-style: italic;
+}
+.pt-bpm--yan { color: var(--accent-pulse); opacity: 0.8; }
+.pt-bpm--zhi { color: var(--accent-cool);  opacity: 0.8; }
+
+.pt-text {
+  font-family: var(--font-serif);
+  font-size: 0.87rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.pt-text--data {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pt-loc { opacity: 0.8; }
+
+/* 蔺知砚的记录带一点卡片感，像是写下来的 */
+.pt-item--zhi .pt-text {
+  background: rgba(81,112,190,0.04);
+  border: 1px solid rgba(81,112,190,0.10);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .heart-num { font-size: 2.5rem; }
+}

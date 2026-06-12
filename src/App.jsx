@@ -1,34 +1,31 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
-import Nav from './components/Nav.jsx'
-import BgPicker from './components/BgPicker.jsx'
-import Home from './pages/Home.jsx'
+import { SettingsProvider } from './components/SettingsContext.jsx'
+import Drawer from './components/Drawer.jsx'
+import Chat from './pages/Chat.jsx'
+import Pulse from './pages/Pulse.jsx'
 import Dream from './pages/Dream.jsx'
-import Heartbeat from './pages/Heartbeat.jsx'
-import Note from './pages/Note.jsx'
 import Reading from './pages/Reading.jsx'
 import Timeline from './pages/Timeline.jsx'
-import HeartRate from './pages/HeartRate.jsx'
+import Settings from './pages/Settings.jsx'
 import './styles/global.css'
 import './App.css'
 
 export default function App() {
   return (
-    <HashRouter>
-      <div className="app">
-        <Nav />
-        <BgPicker />
+    <SettingsProvider>
+      <HashRouter>
+        <Drawer />
         <main className="main">
           <Routes>
-            <Route path="/"          element={<Home />} />
+            <Route path="/"          element={<Chat />} />
+            <Route path="/pulse"     element={<Pulse />} />
             <Route path="/dream"     element={<Dream />} />
-            <Route path="/heartbeat" element={<Heartbeat />} />
-            <Route path="/note"      element={<Note />} />
             <Route path="/reading"   element={<Reading />} />
             <Route path="/timeline"  element={<Timeline />} />
-            <Route path="/heart"     element={<HeartRate />} />
+            <Route path="/settings"  element={<Settings />} />
           </Routes>
         </main>
-      </div>
-    </HashRouter>
+      </HashRouter>
+    </SettingsProvider>
   )
 }
