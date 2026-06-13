@@ -1,6 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fetchBooks } from '../api/index.js'
 import './Reading.css'
+
+function getSettings() {
+  try { return JSON.parse(localStorage.getItem('yann-hadal-settings') || '{}') } catch { return {} }
+}
+
+async function uploadBook(file) {
+  const s = getSettings()
+  const base = (s.vpsBase || '').replace(/\/$/, '')
+  if (!base) throw new Error('请先在设置里填好 VPS 地址')
+  const form = new FormData()
+  form.append('file', file)
+  const res = await fetch(`${base}/hadal/reading`, {
+    method: 'POST',
+    headers: s.apiKey ? { Authorization: `Bearer ${s.apiKey}` } : {},
+    body: form,
+  })
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '')
+    throw new Error(msg || `上传失败 ${res.status}`)
+  }
+  return await res.json()
+}
 
 const MOCK_BOOKS = [
   {
@@ -49,21 +71,65 @@ function ProgressRing({ percent }) {
 export default function Reading() {
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(true)
+  const [uploading, setUploading] = useState(false)
+  const [uploadMsg, setUploadMsg] = useState(null)
+  const fileRef = useRef(null)
 
-  useEffect(() => {
+  function reload() {
+    setLoading(true)
     fetchBooks().then(data => {
       setBooks((data.books && data.books.length > 0) ? data.books : MOCK_BOOKS)
       setLoading(false)
     })
-  }, [])
+  }
+
+  useEffect(() => { reload() }, [])
+
+  async function handleFile(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setUploadMsg(null)
+    try {
+      await uploadBook(file)
+      setUploadMsg({ ok: true, text: `《${file.name.replace(/\.epub$/i, '')}》已加入书库` })
+      reload()
+    } catch (err) {
+      setUploadMsg({ ok: false, text: err.message })
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
 
   const reading = books.filter(b => b.progress < 100)
   const finished = books.filter(b => b.progress >= 100)
 
   return (
     <div className="page reading-page">
-      <h1 className="page-title">共读</h1>
-      <p className="page-sub">一起读的书</p>
+      <div className="reading-header">
+        <div>
+          <h1 className="page-title">共读</h1>
+          <p className="page-sub">一起读的书</p>
+        </div>
+        <label className={`reading-upload-btn ${uploading ? 'reading-upload-btn--loading' : ''}`}>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".epub"
+            style={{ display: 'none' }}
+            onChange={handleFile}
+            disabled={uploading}
+          />
+          {uploading ? '导入中…' : '+ 导入 epub'}
+        </label>
+      </div>
+      {uploadMsg && (
+        <div className={`reading-upload-msg ${uploadMsg.ok ? 'reading-upload-msg--ok' : 'reading-upload-msg--err'}`}>
+          {uploadMsg.text}
+          <button onClick={() => setUploadMsg(null)}>×</button>
+        </div>
+      )}
 
       {loading ? (
         <div className="loading-state">

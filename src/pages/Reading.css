@@ -13,3 +13,11 @@
 .book-author { font-family: var(--font-sans); font-size: 0.74rem; color: var(--text-muted); margin-bottom: 5px; }
 .book-chapter { font-family: var(--font-sans); font-size: 0.74rem; color: var(--text-secondary); margin-bottom: 6px; }
 .book-note { font-family: var(--font-serif); font-size: 0.82rem; color: var(--text-muted); font-style: italic; }
+
+.reading-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.reading-upload-btn { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--border); font-family: var(--font-sans); font-size: 0.78rem; color: var(--accent-green); cursor: pointer; transition: opacity 0.15s; white-space: nowrap; margin-top: 4px; }
+.reading-upload-btn--loading { opacity: 0.5; cursor: default; }
+.reading-upload-msg { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: var(--radius); font-family: var(--font-sans); font-size: 0.8rem; margin-bottom: 16px; }
+.reading-upload-msg--ok { background: rgba(75,135,90,0.08); color: var(--accent-green); }
+.reading-upload-msg--err { background: rgba(192,84,75,0.08); color: var(--accent-pulse); }
+.reading-upload-msg button { background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0 0 0 8px; color: inherit; opacity: 0.6; }
