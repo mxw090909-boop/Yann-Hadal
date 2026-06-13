@@ -270,9 +270,10 @@ body.skin-deep .note-paper {
 
 .chat-send {
   flex-shrink: 0;
+  align-self: stretch;
   font-family: var(--font-sans);
   font-size: 0.84rem;
-  padding: 10px 20px;
+  padding: 0 20px;
   border-radius: var(--radius-lg);
   background: var(--text-primary);
   color: var(--bg-page);

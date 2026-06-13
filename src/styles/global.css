@@ -170,3 +170,9 @@ body.has-bg-image .card {
 body.skin-deep.has-bg-image .card {
   background: rgba(15, 21, 36, 0.82);
 }
+body.has-bg-image .chat-header,
+body.has-bg-image .chat-input-bar {
+  background: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
