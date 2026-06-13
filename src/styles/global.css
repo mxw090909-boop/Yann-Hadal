@@ -157,3 +157,16 @@ input, textarea { font-family: inherit; }
   :root { --nav-width: 0px; }
   .page { padding: 24px 20px 80px; max-width: 100%; }
 }
+
+/* ── 背景图模式：让page透明、card半透明 ── */
+body.has-bg-image .page {
+  background: transparent;
+}
+body.has-bg-image .card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+body.skin-deep.has-bg-image .card {
+  background: rgba(15, 21, 36, 0.82);
+}
