@@ -198,9 +198,17 @@ export default function Chat() {
             <div key={msg.id} className="chat-system">{msg.text}</div>
           ) : (
             <div key={msg.id} className={`chat-line chat-line--${msg.role}`}>
-              <div className="chat-avatar">
-                {msg.role === 'yan' ? settings.yanAvatar : settings.zhiAvatar}
-              </div>
+              {(msg.role === 'yan' ? settings.yanAvatarUrl : settings.zhiAvatarUrl) ? (
+                <img
+                  className="chat-avatar chat-avatar--img"
+                  src={msg.role === 'yan' ? settings.yanAvatarUrl : settings.zhiAvatarUrl}
+                  alt=""
+                />
+              ) : (
+                <div className="chat-avatar">
+                  {msg.role === 'yan' ? settings.yanAvatar : settings.zhiAvatar}
+                </div>
+              )}
               <div className="chat-bubble">
                 <div className="chat-text">{msg.text}</div>
                 {msg.ts && (
@@ -215,7 +223,11 @@ export default function Chat() {
 
         {sending && (
           <div className="chat-line chat-line--zhi">
-            <div className="chat-avatar">{settings.zhiAvatar}</div>
+            {settings.zhiAvatarUrl ? (
+              <img className="chat-avatar chat-avatar--img" src={settings.zhiAvatarUrl} alt="" />
+            ) : (
+              <div className="chat-avatar">{settings.zhiAvatar}</div>
+            )}
             <div className="chat-bubble">
               <div className="chat-thinking">
                 <span /><span /><span />

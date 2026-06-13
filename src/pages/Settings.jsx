@@ -19,6 +19,9 @@ export default function Settings() {
     apiKey: settings.apiKey,
     yanAvatar: settings.yanAvatar,
     zhiAvatar: settings.zhiAvatar,
+    yanAvatarUrl: settings.yanAvatarUrl || '',
+    zhiAvatarUrl: settings.zhiAvatarUrl || '',
+    bgImage: settings.bgImage || '',
   })
 
   function saveConnection() {
@@ -27,6 +30,9 @@ export default function Settings() {
       apiKey: draft.apiKey.trim(),
       yanAvatar: draft.yanAvatar.trim() || '年',
       zhiAvatar: draft.zhiAvatar.trim() || '砚',
+      yanAvatarUrl: draft.yanAvatarUrl.trim(),
+      zhiAvatarUrl: draft.zhiAvatarUrl.trim(),
+      bgImage: draft.bgImage.trim(),
     })
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
@@ -63,15 +69,42 @@ export default function Settings() {
         <div className="skin-labels">
           {SKINS.map(s => <span key={s.id} className="skin-label">{s.label}</span>)}
         </div>
+        <label className="settings-field" style={{ marginTop: '12px' }}>
+          <span className="settings-label">背景图片链接</span>
+          <input
+            className="settings-input"
+            placeholder="https://… 留空则使用纯色背景"
+            value={draft.bgImage}
+            onChange={e => setDraft(d => ({ ...d, bgImage: e.target.value }))}
+          />
+        </label>
       </section>
 
       {/* 头像 */}
       <section className="card settings-section">
-        <div className="settings-section-title">头像字符</div>
-        <p className="settings-hint">对话气泡旁边的小圆圈里显示的字，一到两个字符。</p>
-        <div className="settings-grid">
+        <div className="settings-section-title">头像</div>
+        <p className="settings-hint">填图片链接优先显示图片，留空则使用下方文字字符。</p>
+        <label className="settings-field">
+          <span className="settings-label">蔺年 图片链接</span>
+          <input
+            className="settings-input"
+            placeholder="https://… 留空用文字"
+            value={draft.yanAvatarUrl}
+            onChange={e => setDraft(d => ({ ...d, yanAvatarUrl: e.target.value }))}
+          />
+        </label>
+        <label className="settings-field">
+          <span className="settings-label">蔺知砚 图片链接</span>
+          <input
+            className="settings-input"
+            placeholder="https://… 留空用文字"
+            value={draft.zhiAvatarUrl}
+            onChange={e => setDraft(d => ({ ...d, zhiAvatarUrl: e.target.value }))}
+          />
+        </label>
+        <div className="settings-grid" style={{ marginTop: '8px' }}>
           <label className="settings-field">
-            <span className="settings-label">蔺年</span>
+            <span className="settings-label">蔺年 文字字符</span>
             <input
               className="settings-input settings-input--short"
               value={draft.yanAvatar}
@@ -80,7 +113,7 @@ export default function Settings() {
             />
           </label>
           <label className="settings-field">
-            <span className="settings-label">蔺知砚</span>
+            <span className="settings-label">蔺知砚 文字字符</span>
             <input
               className="settings-input settings-input--short"
               value={draft.zhiAvatar}

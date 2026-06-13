@@ -6,6 +6,9 @@ const DEFAULTS = {
   skin: 'default',
   yanAvatar: '年',
   zhiAvatar: '砚',
+  yanAvatarUrl: '',
+  zhiAvatarUrl: '',
+  bgImage: '',
   vpsBase: '',
   apiKey: '',
 }
@@ -25,6 +28,10 @@ export function SettingsProvider({ children }) {
   useEffect(() => {
     if (!loaded) return
     document.body.className = `skin-${settings.skin}`
+    document.body.style.backgroundImage = settings.bgImage ? `url(${settings.bgImage})` : ''
+    document.body.style.backgroundSize = settings.bgImage ? 'cover' : ''
+    document.body.style.backgroundPosition = settings.bgImage ? 'center' : ''
+    document.body.style.backgroundAttachment = settings.bgImage ? 'fixed' : ''
     try {
       localStorage.setItem('yann-hadal-settings', JSON.stringify(settings))
     } catch { /* 存储不可用时静默 */ }
