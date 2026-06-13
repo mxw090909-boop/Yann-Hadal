@@ -74,8 +74,8 @@ export default function Settings() {
           <input
             className="settings-input"
             placeholder="https://… 留空则使用纯色背景"
-            value={draft.bgImage}
-            onChange={e => setDraft(d => ({ ...d, bgImage: e.target.value }))}
+            value={settings.bgImage}
+            onChange={e => update({ bgImage: e.target.value })}
           />
         </label>
       </section>
