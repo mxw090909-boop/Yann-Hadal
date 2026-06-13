@@ -31,8 +31,8 @@ export function SettingsProvider({ children }) {
     document.body.className = `skin-${settings.skin}${hasBg ? ' has-bg-image' : ''}`
     document.body.style.backgroundImage = hasBg ? `url(${settings.bgImage})` : ''
     document.body.style.backgroundSize = hasBg ? 'cover' : ''
-    document.body.style.backgroundPosition = hasBg ? 'center' : ''
-    document.body.style.backgroundAttachment = hasBg ? 'fixed' : ''
+    document.body.style.backgroundPosition = hasBg ? 'center top' : ''
+    document.body.style.backgroundAttachment = ''
     try {
       localStorage.setItem('yann-hadal-settings', JSON.stringify(settings))
     } catch { /* 存储不可用时静默 */ }
