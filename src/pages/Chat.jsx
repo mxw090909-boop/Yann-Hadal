@@ -84,7 +84,7 @@ export default function Chat() {
   }, [messages, sending])
 
   // ─── 发送消息到 VPS ───
-  // API 契约：POST {vpsBase}/api/chat
+  // API 契约：POST {vpsBase}/hadal/chat
   // 请求体：{ message: string, session: 'yann-hadal-web' }
   // 请求头：Authorization: Bearer {apiKey}
   // 响应：{ reply: string }（同步等待，超时建议设长）
@@ -119,7 +119,7 @@ export default function Chat() {
     try {
       const controller = new AbortController()
       const timer = setTimeout(() => controller.abort(), 120000) // 2分钟超时
-      const res = await fetch(`${settings.vpsBase.replace(/\/$/, '')}/api/chat`, {
+      const res = await fetch(`${settings.vpsBase.replace(/\/$/, '')}/hadal/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

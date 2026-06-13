@@ -5,9 +5,13 @@ import './Reading.css'
 async function fetchBooks() {
   try {
     // 需要通过后端代理调用 Nenei VPS 的 yomiai_list_books
-    const res = await fetch('/api/yomiai/books')
+    const settings = JSON.parse(localStorage.getItem('yann-hadal-settings') || '{}')
+    const res = await fetch('/hadal/reading', {
+      headers: settings.apiKey ? { Authorization: `Bearer ${settings.apiKey}` } : {},
+    })
     if (!res.ok) throw new Error('books fetch failed')
-    return await res.json()
+    const data = await res.json()
+    return data.books || []
   } catch {
     return MOCK_BOOKS
   }

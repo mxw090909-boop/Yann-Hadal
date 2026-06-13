@@ -1,16 +1,24 @@
 // API 配置
 // 部署时把这些地址改成你VPS上真实的路径
 const CONFIG = {
-  LINBRAIN_BASE: import.meta.env.VITE_LINBRAIN_BASE || '/api/linbrain',
+  HADAL_BASE: import.meta.env.VITE_HADAL_BASE || '/hadal',
   VPS_BASE: import.meta.env.VITE_VPS_BASE || '',
-  NOTION_DATABASE: import.meta.env.VITE_NOTION_DB || '',
+}
+
+function authHeaders() {
+  try {
+    const settings = JSON.parse(localStorage.getItem('yann-hadal-settings') || '{}')
+    return settings.apiKey ? { Authorization: `Bearer ${settings.apiKey}` } : {}
+  } catch {
+    return {}
+  }
 }
 
 // ─── lin-brain API ─────────────────────────────────────────
 
 export async function fetchDreams() {
   try {
-    const res = await fetch(`${CONFIG.LINBRAIN_BASE}/dream`, { method: 'POST' })
+    const res = await fetch(`${CONFIG.HADAL_BASE}/dream`, { headers: authHeaders() })
     if (!res.ok) throw new Error('dream fetch failed')
     return await res.json()
   } catch {
@@ -20,9 +28,9 @@ export async function fetchDreams() {
 
 export async function breathMemory(query = '', maxResults = 20) {
   try {
-    const res = await fetch(`${CONFIG.LINBRAIN_BASE}/breath`, {
+    const res = await fetch(`${CONFIG.HADAL_BASE}/breath`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
       body: JSON.stringify({ query, max_results: maxResults })
     })
     if (!res.ok) throw new Error('breath fetch failed')
@@ -38,7 +46,9 @@ export async function fetchHeartHistory(date) {
   // 通过后端代理调用 shortcut_history
   // 需要配置一个轻量后端，或者直接在VPS上暴露HTTP接口
   try {
-    const res = await fetch(`/api/shortcut-history?date=${date}`)
+    const res = await fetch(`${CONFIG.HADAL_BASE}/pulse?date=${encodeURIComponent(date)}`, {
+      headers: authHeaders(),
+    })
     if (!res.ok) throw new Error('heart history failed')
     return await res.json()
   } catch {

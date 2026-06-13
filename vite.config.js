@@ -7,10 +7,9 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api/linbrain': {
-        target: 'http://localhost:8100',
+      '/hadal': {
+        target: 'http://localhost:8793',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/linbrain/, '')
       }
     }
   },
