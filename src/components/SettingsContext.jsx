@@ -29,7 +29,7 @@ export function SettingsProvider({ children }) {
     if (!loaded) return
     const hasBg = Boolean(settings.bgImage)
     document.body.className = `skin-${settings.skin}${hasBg ? ' has-bg-image' : ''}`
-    document.body.style.backgroundImage = hasBg ? `url(${settings.bgImage})` : ''
+    document.body.style.backgroundImage = hasBg ? `url("${settings.bgImage}")` : ''
     document.body.style.backgroundSize = hasBg ? 'cover' : ''
     document.body.style.backgroundPosition = hasBg ? 'center top' : ''
     document.body.style.backgroundAttachment = ''
