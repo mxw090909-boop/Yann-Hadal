@@ -3,7 +3,9 @@ import { fetchDreams } from '../api/index.js'
 import './Dream.css'
 
 function formatTime(iso) {
+  if (!iso) return ''
   const d = new Date(iso)
+  if (isNaN(d)) return ''
   return d.toLocaleString('zh-CN', {
     month: 'long', day: 'numeric',
     hour: '2-digit', minute: '2-digit'

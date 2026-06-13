@@ -1,21 +1,6 @@
 import { useEffect, useState } from 'react'
+import { fetchBooks } from '../api/index.js'
 import './Reading.css'
-
-// 对接 nenei-yomiai API
-async function fetchBooks() {
-  try {
-    // 需要通过后端代理调用 Nenei VPS 的 yomiai_list_books
-    const settings = JSON.parse(localStorage.getItem('yann-hadal-settings') || '{}')
-    const res = await fetch('/hadal/reading', {
-      headers: settings.apiKey ? { Authorization: `Bearer ${settings.apiKey}` } : {},
-    })
-    if (!res.ok) throw new Error('books fetch failed')
-    const data = await res.json()
-    return data.books || []
-  } catch {
-    return MOCK_BOOKS
-  }
-}
 
 const MOCK_BOOKS = [
   {
@@ -67,7 +52,7 @@ export default function Reading() {
 
   useEffect(() => {
     fetchBooks().then(data => {
-      setBooks(Array.isArray(data) ? data : MOCK_BOOKS)
+      setBooks((data.books && data.books.length > 0) ? data.books : MOCK_BOOKS)
       setLoading(false)
     })
   }, [])

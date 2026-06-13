@@ -1,24 +1,31 @@
-// API 配置
-// 部署时把这些地址改成你VPS上真实的路径
-const CONFIG = {
-  HADAL_BASE: import.meta.env.VITE_HADAL_BASE || '/hadal',
-  VPS_BASE: import.meta.env.VITE_VPS_BASE || '',
-}
-
-function authHeaders() {
+// API 配置 — 从 localStorage settings 动态读取 vpsBase
+function getSettings() {
   try {
-    const settings = JSON.parse(localStorage.getItem('yann-hadal-settings') || '{}')
-    return settings.apiKey ? { Authorization: `Bearer ${settings.apiKey}` } : {}
+    return JSON.parse(localStorage.getItem('yann-hadal-settings') || '{}')
   } catch {
     return {}
   }
+}
+
+function hadalBase() {
+  const s = getSettings()
+  const base = (s.vpsBase || import.meta.env.VITE_VPS_BASE || '').replace(/\/$/, '')
+  return base ? `${base}/hadal` : (import.meta.env.VITE_HADAL_BASE || '/hadal')
+}
+
+function authHeaders(json = false) {
+  const s = getSettings()
+  const headers = {}
+  if (s.apiKey) headers['Authorization'] = `Bearer ${s.apiKey}`
+  if (json) headers['Content-Type'] = 'application/json'
+  return headers
 }
 
 // ─── lin-brain API ─────────────────────────────────────────
 
 export async function fetchDreams() {
   try {
-    const res = await fetch(`${CONFIG.HADAL_BASE}/dream`, { headers: authHeaders() })
+    const res = await fetch(`${hadalBase()}/dream`, { headers: authHeaders() })
     if (!res.ok) throw new Error('dream fetch failed')
     return await res.json()
   } catch {
@@ -28,9 +35,9 @@ export async function fetchDreams() {
 
 export async function breathMemory(query = '', maxResults = 20) {
   try {
-    const res = await fetch(`${CONFIG.HADAL_BASE}/breath`, {
+    const res = await fetch(`${hadalBase()}/breath`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...authHeaders() },
+      headers: authHeaders(true),
       body: JSON.stringify({ query, max_results: maxResults })
     })
     if (!res.ok) throw new Error('breath fetch failed')
@@ -40,13 +47,21 @@ export async function breathMemory(query = '', maxResults = 20) {
   }
 }
 
+export async function fetchBooks() {
+  try {
+    const res = await fetch(`${hadalBase()}/reading`, { headers: authHeaders() })
+    if (!res.ok) throw new Error('reading fetch failed')
+    return await res.json()
+  } catch {
+    return { books: [] }
+  }
+}
+
 // ─── Nenei VPS — 心率 & 状态 ──────────────────────────────
 
 export async function fetchHeartHistory(date) {
-  // 通过后端代理调用 shortcut_history
-  // 需要配置一个轻量后端，或者直接在VPS上暴露HTTP接口
   try {
-    const res = await fetch(`${CONFIG.HADAL_BASE}/pulse?date=${encodeURIComponent(date)}`, {
+    const res = await fetch(`${hadalBase()}/pulse?date=${encodeURIComponent(date)}`, {
       headers: authHeaders(),
     })
     if (!res.ok) throw new Error('heart history failed')
